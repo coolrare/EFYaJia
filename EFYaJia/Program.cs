@@ -1,6 +1,7 @@
 ﻿using EFYaJia.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,21 +17,39 @@ namespace EFYaJia
             using (var db = new ContosoUniversityEntities())
             {
                 Console.WriteLine(DateTime.Now + "\t" + "Query Started.");
-                QueryData(db);
+
+                db.Database.Log = (log) => { Console.WriteLine(log); };
+                //QueryData(db);
+                db.Database.Log = null;
 
                 //AddNewRecord(db);
                 //UpdateData(db);
                 //DeleteData(db);
 
-                db.Database.Log = (log) => { Console.WriteLine(log); };
+
+                var c = db.Course.Find(1);
+
+                //c.Person.Add(db.Person.Find(3));
+                c.Person.Add(new Person()
+                {
+                    FirstName = "AA",
+                    LastName = "BB",
+                    Discriminator = "123"
+                });
 
                 Console.WriteLine(DateTime.Now + "\t" + "SaveChanges Started.");
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    throw ex;
+                }
 
-                db.Database.Log = null;
 
-                Console.WriteLine(DateTime.Now + "\t" + "Query Started.");
-                QueryData(db);
+                //Console.WriteLine(DateTime.Now + "\t" + "Query Started.");
+                //QueryData(db);
             }
 
             Console.WriteLine(DateTime.Now + "\t" + "Ended.");
@@ -70,7 +89,9 @@ namespace EFYaJia
 
         private static void QueryData(ContosoUniversityEntities db)
         {
-            var depts = db.Department.ToList();
+            db.Configuration.ProxyCreationEnabled = false;
+
+            var depts = db.Department.Include("Course").ToList();
 
             foreach (var dept in depts)
             {
