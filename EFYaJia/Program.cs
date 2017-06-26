@@ -11,6 +11,8 @@ namespace EFYaJia
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Started.");
+
             using (var db = new ContosoUniversityEntities())
             {
 
@@ -26,6 +28,8 @@ namespace EFYaJia
                 db.Database.Log = (log) => { Console.WriteLine(log); };
 
                 db.SaveChanges();
+
+                db.Database.Log = null;
 
                 QueryData(db);
 
