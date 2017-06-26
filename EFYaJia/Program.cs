@@ -13,15 +13,17 @@ namespace EFYaJia
         {
             using (var db = new ContosoUniversityEntities())
             {
-                db.Database.Log = (log) => { Console.WriteLine(log); };
+                //db.Database.Log = (log) => { Console.WriteLine(log); };
 
-                var data = db.Course
-                    .Where(p => p.Title.Contains("Git"))
-                    .ToList();
+                var depts = db.Department.ToList();
 
-                foreach (var item in data)
+                foreach (var dept in depts)
                 {
-                    Console.WriteLine(item.Title + "\t" + item.Department.Name);
+                    Console.WriteLine("部門: " + dept.Name);
+                    foreach (var course in dept.Course)
+                    {
+                        Console.WriteLine("\t" + course.Title);
+                    }
                 }
             }
 
