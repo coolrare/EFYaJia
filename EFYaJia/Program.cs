@@ -22,7 +22,7 @@ namespace EFYaJia
                     Console.WriteLine("部門: " + dept.Name);
                     foreach (var course in dept.Course)
                     {
-                        Console.WriteLine("\t" + course.Title);
+                        Console.WriteLine("\t" + course.Title + "\t" + course.CreatedOn);
                     }
                 }
             }
