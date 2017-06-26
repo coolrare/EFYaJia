@@ -25,27 +25,47 @@ namespace EFYaJia
                 //AddNewRecord(db);
                 //UpdateData(db);
                 //DeleteData(db);
-
+                //多對多關聯新增(db);
 
                 var c = db.Course.Find(1);
 
-                //c.Person.Add(db.Person.Find(3));
-                c.Person.Add(new Person()
-                {
-                    FirstName = "AA",
-                    LastName = "BB",
-                    Discriminator = "123"
-                });
+                Console.WriteLine(db.Entry(c).State);
 
-                Console.WriteLine(DateTime.Now + "\t" + "SaveChanges Started.");
-                try
+                c.Credits++;
+
+                Console.WriteLine(db.Entry(c).State);
+                var ce = db.Entry(c);
+                Console.WriteLine("修改前: " + ce.OriginalValues.GetValue<int>("Credits"));
+                Console.WriteLine("修改後: " + ce.CurrentValues.GetValue<int>("Credits"));
+
+                var cc = new Course()
                 {
-                    db.SaveChanges();
-                }
-                catch (DbEntityValidationException ex)
+                    Title = "Hello 2",
+                    Department = db.Department.Find(5)
+                };
+                db.Course.Add(cc);
+
+                var ce2 = db.Entry(cc);
+
+                if (ce2.State == System.Data.Entity.EntityState.Added)
                 {
-                    throw ex;
+                    ce2.Entity.CreatedOn = DateTime.Now;
                 }
+
+                db.SaveChanges();
+
+                Console.WriteLine(db.Entry(c).State);
+
+
+                //Console.WriteLine(DateTime.Now + "\t" + "SaveChanges Started.");
+                //try
+                //{
+                //    db.SaveChanges();
+                //}
+                //catch (DbEntityValidationException ex)
+                //{
+                //    throw ex;
+                //}
 
 
                 //Console.WriteLine(DateTime.Now + "\t" + "Query Started.");
@@ -53,6 +73,19 @@ namespace EFYaJia
             }
 
             Console.WriteLine(DateTime.Now + "\t" + "Ended.");
+        }
+
+        private static void 多對多關聯新增(ContosoUniversityEntities db)
+        {
+            var c = db.Course.Find(1);
+
+            //c.Person.Add(db.Person.Find(3));
+            c.Person.Add(new Person()
+            {
+                FirstName = "AA",
+                LastName = "BB",
+                Discriminator = "123"
+            });
         }
 
         private static void DeleteData(ContosoUniversityEntities db)
