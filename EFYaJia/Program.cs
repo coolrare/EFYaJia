@@ -20,14 +20,7 @@ namespace EFYaJia
 
                 //AddNewRecord(db);
                 //UpdateData(db);
-
-                foreach (var item in db.Course.Where(p => p.CourseID >= 11 && p.CourseID <= 18).ToList())
-                {
-                    //db.Course.Remove(new Course() { CourseID = item.CourseID });
-                    db.Course.Remove(item);
-                }
-
-                db.Database.ExecuteSqlCommand("DELETE FROM dbo.Course WHERE CourseID >= @p0 AND CourseID <= @p1", 11, 18);
+                //DeleteData(db);
 
                 db.Database.Log = (log) => { Console.WriteLine(log); };
 
@@ -41,6 +34,17 @@ namespace EFYaJia
             }
 
             Console.WriteLine(DateTime.Now + "\t" + "Ended.");
+        }
+
+        private static void DeleteData(ContosoUniversityEntities db)
+        {
+            foreach (var item in db.Course.Where(p => p.CourseID >= 11 && p.CourseID <= 18).ToList())
+            {
+                //db.Course.Remove(new Course() { CourseID = item.CourseID });
+                db.Course.Remove(item);
+            }
+
+            db.Database.ExecuteSqlCommand("DELETE FROM dbo.Course WHERE CourseID >= @p0 AND CourseID <= @p1", 11, 18);
         }
 
         private static void UpdateData(ContosoUniversityEntities db)
