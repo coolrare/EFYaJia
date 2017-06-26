@@ -13,20 +13,39 @@ namespace EFYaJia
         {
             using (var db = new ContosoUniversityEntities())
             {
-                //db.Database.Log = (log) => { Console.WriteLine(log); };
 
-                var depts = db.Department.ToList();
+                QueryData(db);
 
-                foreach (var dept in depts)
+                db.Course.Add(new Course()
                 {
-                    Console.WriteLine("部門: " + dept.Name);
-                    foreach (var course in dept.Course)
-                    {
-                        Console.WriteLine("\t" + course.Title + "\t" + course.CreatedOn);
-                    }
-                }
+                    Title = "Hello 1",
+                    Credits = 5,
+                    Department = db.Department.Find(5)
+                });
+
+                db.Database.Log = (log) => { Console.WriteLine(log); };
+
+                db.SaveChanges();
+
+                QueryData(db);
+
+
             }
 
+        }
+
+        private static void QueryData(ContosoUniversityEntities db)
+        {
+            var depts = db.Department.ToList();
+
+            foreach (var dept in depts)
+            {
+                Console.WriteLine("部門: " + dept.Name);
+                foreach (var course in dept.Course)
+                {
+                    Console.WriteLine("\t" + course.Title + "\t" + course.CreatedOn);
+                }
+            }
         }
     }
 }
