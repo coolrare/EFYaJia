@@ -60,6 +60,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ContosoUniversity.Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ContosoUniversity.Context.Partial.cs" />
     <Compile Include="Models\ContosoUniversity.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
